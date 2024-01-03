@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { API_KEY } from './key'
 
 type OMDB ={
   Title: string,
@@ -9,6 +8,9 @@ type OMDB ={
   imdbID: string,
   Type: string
 }
+
+// const API_KEY:string = process.env.OMDB_API_KEY
+const API_KEY = import.meta.env.VITE_OMDB_API_KEY  
 
 function App() {
   const [data, setData] = useState<OMDB[] | null>(null)
