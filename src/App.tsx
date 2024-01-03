@@ -37,50 +37,49 @@ function App() {
     <>
       <header className='header'>
         <h1>My Movie List</h1>
+        
+        <button>My list</button>
       </header>
 
-      <main className='main'>
-        <div className='main__left'>
-          <h2>Search a movie:</h2>
+      <aside className='aside'>
+        <h2>My list:</h2>
 
+        <ul>
+          <li>
+            Example 0
+          </li>
+        </ul>
+      </aside>
+
+      <main className='main'>
+        <div className='main__content'>
           <div className='search__field'>
-            <form onSubmit={event=>event.preventDefault()}>
+            <form className='search__input' onSubmit={event=>event.preventDefault()}>
               <input ref={searchTitle} type='text' placeholder='Avatar'/>
               <button onClick={()=>searchMovieTitle()}>Search</button>
             </form>
 
-            <h2>Search result:</h2>
-            <button onClick={()=>{setPage(page=>page-1)}}>Previous page</button>
-            <button onClick={()=>{setPage(page=>page+1)}}>Next page</button>
-
-            <div>
-                {data && data !== null ? <div>
-                  {data !== null ? data.map(item=>{
-                    return <div key={(Math.random()).toString() + item}>
-                      <img src={item.Poster} alt='Poster image not found'/>
-                      <p>Title: {item.Title}</p>
-                      <p>Type: {item.Type}</p>
-                      <p>Year: {item.Year}</p>
-                      <p>IMDB ID: {item.imdbID}</p>
-                      <button>ADD</button>
-                      </div>
-                  }) : ''}
-                </div> : 'Title not found'}
+            <div className='search__controlls'>
+              <button onClick={()=>{setPage(page=>page-1)}}>Previous page</button>
+              <button onClick={()=>{setPage(page=>page+1)}}>Next page</button>
             </div>
           </div>
+
+          {/* Search results */}
+          {data && data !== null ? <div className='search__results'>
+            {data !== null ? data.map(item=>{
+              return <div className='result__item' key={(Math.random()).toString() + item}>
+                <img src={item.Poster} alt='Poster image not found'/>
+                <p>Title: {item.Title}</p>
+                <p>Type: {item.Type}</p>
+                <p>Year: {item.Year}</p>
+                <p>IMDB ID: {item.imdbID}</p>
+                <button>ADD</button>
+                </div>
+            }) : ''}
+          </div> : 'Title not found'}
+        
         </div>
-
-{/*  */}
-        <div className='main__right'>
-          <h2>My list:</h2>
-
-          <ul>
-            <li>
-              Example 0
-            </li>
-          </ul>
-        </div>
-
       </main>
     </>
   )
