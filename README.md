@@ -10,7 +10,7 @@
 ## Run in your machine
 - Clone the repository in your machine:
 ```bash
-git clone 
+git clone git@github.com:jeovabastos/my-movie-list.git
 ```
 
 - Go to /my-movie-list, you will need Vitejs, so type:
