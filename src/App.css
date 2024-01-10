@@ -17,9 +17,30 @@
 /*  */
 
 .aside{
+    background-color: #2d4c9a;
+    position: absolute;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 1;
+}
+.aside > h2{
+    padding: 1rem;
+    color: var(--secundary-color);
+}
+
+.hidden{
     display: none;
 }
 
+.aside__items{
+    background-color: #2d4c9a;
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 /*  */
 
 .main{

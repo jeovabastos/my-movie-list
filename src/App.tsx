@@ -9,13 +9,13 @@ type OMDB ={
   Type: string
 }
 
-// const API_KEY:string = process.env.OMDB_API_KEY
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY  
 
 function App() {
   const [data, setData] = useState<OMDB[] | null>(null)
   const [searchTitleData, setSearchTitleData] = useState<string>('')
   const [page, setPage] = useState(1)
+  const [movieList, setMovieList] = useState<OMDB[] | null>(null)
 
   const searchTitle = useRef<HTMLInputElement>(null)
 
@@ -25,8 +25,22 @@ function App() {
     .then(stringResponse => JSON.stringify(stringResponse.Search))
     .then(jsResponse => setData(JSON.parse(jsResponse)))
     // .then(jsResponse => console.log(JSON.parse(jsResponse)))
-  },[searchTitleData, page])
 
+    const movieData = localStorage.getItem('myMovieList')
+    if(movieData){
+      const list: string | null = localStorage.getItem('myMovieList')
+      console.log('list: ', list)
+      
+      if(list && list !== null){
+        const parsedList = JSON.parse(list)
+        console.log('parsedList: ', parsedList)
+  
+        setMovieList(parsedList)
+      }
+    }
+
+  },[searchTitleData, page])
+  
   function searchMovieTitle(){
     if(searchTitle !== null && searchTitle.current && searchTitle.current.value){
       const value: string = searchTitle.current.value
@@ -35,22 +49,59 @@ function App() {
     }
   }
 
+  function toFavorite(item: OMDB){
+    if(
+      localStorage.getItem('myMovieList') && 
+      localStorage.getItem('myMovieList') !== null && 
+      typeof localStorage.getItem('myMovieList') === 'string'
+      ){
+
+      const listFromLocalStorage: string | null = localStorage.getItem('myMovieList')
+      if(listFromLocalStorage){
+        const parsedListFromLocalStorage = JSON.parse(listFromLocalStorage)
+        parsedListFromLocalStorage.push(item)
+
+        setMovieList(parsedListFromLocalStorage)
+
+        const parsedListFromLocalStorageJSON = JSON.stringify(parsedListFromLocalStorage)
+        localStorage.setItem('myMovieList', parsedListFromLocalStorageJSON)
+      }
+    }else{
+      const itemArray = new Array(item)
+      setMovieList(itemArray)
+
+      const itemArrayJSON = JSON.stringify(itemArray)
+
+      localStorage.setItem('myMovieList', itemArrayJSON)      
+    }
+  }
+
+  function toggleAside(){
+    const asideElement: HTMLElement | null = document.getElementById('asideBox')
+    
+    if(asideElement && asideElement !== null){
+      asideElement.classList.contains('hidden') ? asideElement.classList.remove('hidden') : asideElement.classList.add('hidden')
+    }
+  }
+
   return (
     <>
       <header className='header'>
         <h1>My Movie List</h1>
-        
-        <button>My list</button>
+
+        <button onClick={()=>toggleAside()}>My list</button>
       </header>
 
-      <aside className='aside'>
+      <aside id='asideBox' className='aside hidden'>
         <h2>My list:</h2>
 
-        <ul>
-          <li>
-            Example 0
-          </li>
-        </ul>
+        {movieList && movieList !== null ? <div className='aside__items'>{movieList.map(item => {
+          return <div key={item.imdbID + Math.random()}>
+              <img src={item.Poster}/>
+              <p>{item.Title}</p>
+              <p>{item.Type}</p>
+            </div>})
+          }</div> : 'ainda não fez a função toFavorite né?????'}
       </aside>
 
       <main className='main'>
@@ -70,13 +121,14 @@ function App() {
           {/* Search results */}
           {data && data !== null ? <div className='search__results'>
             {data !== null ? data.map(item=>{
+
               return <div className='result__item' key={(Math.random()).toString() + item}>
                 <img src={item.Poster} alt='Poster image not found'/>
                 <p>Title: {item.Title}</p>
                 <p>Type: {item.Type}</p>
                 <p>Year: {item.Year}</p>
                 <p>IMDB ID: {item.imdbID}</p>
-                <button>ADD</button>
+                <button onClick={()=>{toFavorite(item)}}>ADD</button>
                 </div>
             }) : ''}
           </div> : 'Title not found'}
