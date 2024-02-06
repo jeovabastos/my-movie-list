@@ -33,7 +33,7 @@ function App() {
       
       if(list && list !== null){
         const parsedList = JSON.parse(list)
-        console.log('parsedList: ', parsedList)
+        // console.log('parsedList: ', parsedList)
   
         setMovieList(parsedList)
       }

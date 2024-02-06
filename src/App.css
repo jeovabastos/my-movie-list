@@ -54,6 +54,15 @@
         flex-direction: column;
         gap: 2rem;
     }
+
+    .aside{
+        width: 100%;
+    }
+
+    .aside__items{
+        display: flex;
+        justify-content: center;
+    }
 }
 
 /*  */
